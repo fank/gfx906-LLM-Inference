@@ -159,7 +159,7 @@ Two sweeps varied **only the MTP draft head** (predictable prompt, 40k/q8_0 KV, 
 2. **Do not switch to Q5/Q6** — for this QAT model it's all cost (speed, VRAM, MTP), zero measurable quality benefit.
 3. **If you still want to run a higher quant** (e.g. to chase subtle long‑form quality the correctness eval can't see): the only comfortable config on this card is **Q5_K_XL with `-ctk q8_0 -ctv q8_0`** at ~68 t/s — and since context is nearly free here, **40k or 60k makes almost no VRAM difference** (~5 GB headroom either way). Q6_K_XL is too big for comfortable use on this card at any context in range.
 4. **MTP draft head: use the Q4_0 head, never F16.** Per §4a, the F16 head gives identical acceptance to Q8_0 but is slower; the Q4_0 head is fastest with acceptance ≥ Q8_0. (Your `start-rocm.sh` already notes Q4_0 as the best head — confirmed.)
-5. **Reclaim disk if not keeping them:** `rm /home/josh/llm/models/gemma-4-26B-A4B-it-UD-Q5_K_XL.gguf /home/josh/llm/models/gemma-4-26B-A4B-it-UD-Q6_K_XL.gguf` frees **44.5 GB**.
+5. **Reclaim disk if not keeping them:** `rm /home/<username>/llm/models/gemma-4-26B-A4B-it-UD-Q5_K_XL.gguf /home/<username>/llm/models/gemma-4-26B-A4B-it-UD-Q6_K_XL.gguf` frees **44.5 GB**.
 6. **~8 GB VRAM baseline — RESOLVED (2026‑06‑20).** It was the legacy `prompt.service` (a native‑Vulkan `llama-server` running the 12B model on the MI50, port 8088, auto‑started at boot). `systemctl stop`+`disable`d → 8.24 GB freed, no reboot, won't return. Full ~32 GB now available.
 
 ---

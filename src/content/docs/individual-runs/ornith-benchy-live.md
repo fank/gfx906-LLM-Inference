@@ -64,7 +64,7 @@ Decode is bandwidth ÷ active-params bound, so Ornith's ~3× higher absolute dec
 ## Reproduce
 
 ```bash
-TOK=/home/josh/llm/rocm-cache/huggingface/hub/models--Qwen--Qwen3.5-35B-A3B/snapshots/59d61f3ce65a6d9863b86d2e96597125219dc754
+TOK=/home/<username>/llm/rocm-cache/huggingface/hub/models--Qwen--Qwen3.5-35B-A3B/snapshots/59d61f3ce65a6d9863b86d2e96597125219dc754
 HF_HUB_OFFLINE=1 uvx llama-benchy \
   --base-url http://localhost:8089/v1 --model ornith-hipgraphs \
   --tokenizer "$TOK" \

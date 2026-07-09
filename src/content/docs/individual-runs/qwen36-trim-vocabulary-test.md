@@ -92,5 +92,5 @@ Precise 14-point grid (0→65536, pp512/tg128, runs 2, exact-tg) — the same te
 **Verdict:** on the benchy **prose** corpus the two are **near-identical up to ~33k** (both ~75→67 t/s), and the trimmed model pulls **ahead only at deep context** (49k: 71.3 vs 64.1; 65k: 63.2 vs 59.6) → a shallower −19% decay vs Ornith's −24%. The trimmed edge is **clearer on code/structured content** — the temp-0 n-max probe hit 87 t/s vs Ornith's ~70. Mechanism: the smaller trimmed lm_head shaves the per-token output projection, and that saving grows in relative terms as the rest of the step slows down at deep context. Caveat: quant differs (Q4_K_S vs Ornith's Q4_K_M) and it's a different base model, so this is not a clean isolation of the trimming effect. Both sit ~3× above the DGX Spark Qwen3.5-122B family (different hardware/size — see the Ornith-vs-DGX report for why height isn't a fair axis).
 
 ## Files
-- Model kept on disk: `/home/josh/llm/models/qwen36-trim/qwen3.6-35B-vocabulary-trimming-Q4_K_S.gguf`
+- Model kept on disk: `/home/<username>/llm/models/qwen36-trim/qwen3.6-35B-vocabulary-trimming-Q4_K_S.gguf`
 - Raw benchy JSON: scratchpad `qwen36trim_ctxsweep.json`

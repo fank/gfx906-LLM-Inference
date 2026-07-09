@@ -35,7 +35,7 @@ description: "ubatch tuning (+46%), HIP graphs (+12%), ngram vs MTP, n-max sweep
 | HIP graphs | ✅ ON (GGML_HIP_GRAPHS=ON) |
 
 
-**Compose file:** `/home/josh/llm/docker-compose-hipgraphs.yml`
+**Compose file:** `/home/<username>/llm/docker-compose-hipgraphs.yml`
 
 ---
 
@@ -174,9 +174,9 @@ When enabled, llama.cpp stores computed KV cache entries for prompts. If n8n sen
 
 **Docker image:** `llama-hipgraphs:upstream-rocm-7.2.4` (custom built from upstream latest + HIP graphs)
 
-**Dockerfile:** `/home/josh/llm/Dockerfile.hipgraphs`
+**Dockerfile:** `/home/<username>/llm/Dockerfile.hipgraphs`
 
-**Compose file:** `/home/josh/llm/docker-compose-hipgraphs.yml`
+**Compose file:** `/home/<username>/llm/docker-compose-hipgraphs.yml`
 
 **Key insight:** The arte-fact README states "gfx906 at batch=1 is latency-bound (10% bandwidth utilization), not bandwidth-bound". This is why reducing kernel launch overhead via HIP graphs is more effective than pure bandwidth optimizations.
 
@@ -227,7 +227,7 @@ The card already reaches 1725 MHz at 191W. Increasing the power limit could sust
 
 Use the existing benchmark script:
 ```bash
-python3 /home/josh/llm/scripts/bench_long.py
+python3 /home/<username>/llm/scripts/bench_long.py
 ```
 
 This sends a 3.4K token code review prompt requesting 500 tokens of output, matching the data above.

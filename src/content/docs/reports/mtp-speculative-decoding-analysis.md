@@ -9,7 +9,7 @@ description: "Why MTP doesn't help the 26B-A4B MoE: break-even acceptance ≈41�
 **Box:** AMD Instinct MI50 32 GB (gfx906 / Vega20, passive‑cooled, now holds full 1725 MHz)
 **Stack:** ROCm/HIP llama.cpp in Docker — image `mixa3607/llama.cpp-gfx906:b9728-rocm-7.2.3`, build `fabde3b`, container `mi50-llm`, port 8089
 **Model:** official Gemma‑4‑26B‑A4B MoE QAT, `gemma-4-26B_q4_0-it.gguf` (Q4_0), 30 layers, **128 experts, top‑8 routing**, ~4B active params/token
-**MTP heads on disk:** `/home/josh/llm/models/MTP/gemma-4-26B-A4B-it-{F16,Q8_0,Q4_0}-MTP.gguf`
+**MTP heads on disk:** `/home/<username>/llm/models/MTP/gemma-4-26B-A4B-it-{F16,Q8_0,Q4_0}-MTP.gguf`
 
 > This is an **analysis + recommendations** document. **Nothing in the running setup was changed.** The current container still runs **raw (no MTP)** at ~82 t/s, which remains the right default.
 

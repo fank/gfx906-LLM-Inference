@@ -8,7 +8,7 @@ description: "Hardware validation, thermal tests, Vulkan vs ROCm migration, MTP 
 **Machine:** Nobara (Fedora-based) Linux dev sandbox · **Card:** AMD Instinct MI50 32 GB (gfx906 / Vega 20)
 **Workload:** AI/LLM inference for an n8n node — "big data in → small data out" (prefill-dominated). Not gaming.
 **Last updated:** 2026-06-20 (living document — appended as tests run)
-**Current state (TL;DR):** endpoint = **ROCm/HIP Docker** (`mi50-llm`, port 8089), Gemma-4-26B MoE Q4_0, 128k, **raw (no MTP)**, **~82 tok/s** (8.7× the old Vulkan), boot-persistent, n8n at `http://172.20.0.1:8089/v1`. Key findings: §7.6 (ROCm vs Vulkan = 8.7×), §7.7/§7.7b (MTP off — MoE breaks speculative decoding, externally confirmed).
+**Current state (TL;DR):** endpoint = **ROCm/HIP Docker** (`mi50-llm`, port 8089), Gemma-4-26B MoE Q4_0, 128k, **raw (no MTP)**, **~82 tok/s** (8.7× the old Vulkan), boot-persistent, n8n at `http://172.x.x.x:8089/v1`. Key findings: §7.6 (ROCm vs Vulkan = 8.7×), §7.7/§7.7b (MTP off — MoE breaks speculative decoding, externally confirmed).
 
 > Purpose of this file: keep a running record of *what* we did, *what we measured*, and *why* — so decisions are traceable and reproducible.
 
@@ -66,7 +66,7 @@ The card is passively cooled, so we measured behavior under sustained load befor
 **Decision: native llama.cpp + Vulkan (RADV). Docker/ROCm path abandoned.**
 
 - The earlier plan built a Docker/ROCm (HIP) stack (mixa3607 gfx906 images). We **dropped it**: the native Vulkan server already runs Gemma 4 + MTP at high acceptance, so Docker added complexity for no benefit.
-- **Build in use:** `/home/josh/llama.cpp/build/bin/llama-server` — **b9565 (2026-06-08)**. Gemma 4 MTP needs ≥ b9553 ✅.
+- **Build in use:** `/home/<username>/llama.cpp/build/bin/llama-server` — **b9565 (2026-06-08)**. Gemma 4 MTP needs ≥ b9553 ✅.
 - **`--device Vulkan1`** targets the MI50.
 
 **Tooling gotcha (TESTED):** `llama-bench` and `llama-cli` in that build are **ABI-broken** — `undefined symbol: cpu_get_num_math` (Apr-19 binaries vs Jun-08 shared libs). Rebuilding `llama-bench` fails (`vulkan-shaders-gen` won't compile). **→ All benchmarking is done via `llama-server`'s `/completion` timings JSON**, which is actually better here: it's the real production path *and* it reports MTP acceptance (which llama-bench cannot).
@@ -75,7 +75,7 @@ The card is passively cooled, so we measured behavior under sustained load befor
 
 ## 5. Models & context limits (TESTED via GGUF metadata + load logs)
 
-Downloaded to `/home/josh/llm/models/`:
+Downloaded to `/home/<username>/llm/models/`:
 
 | Model | File | Size | MTP head | head `n_ctx_train` |
 |---|---|---|---|---|
@@ -231,12 +231,12 @@ Sources:
 
 ## 8. n8n integration (TESTED)
 
-n8n runs in **Docker** (`ghcr.io/n8nsh/n8n:latest`, port 5678) on network **`n8n_default`** (gateway **`172.20.0.1`** = host as seen by the container).
+n8n runs in **Docker** (`ghcr.io/n8nsh/n8n:latest`, port 5678) on network **`n8n_default`** (gateway **`172.x.x.x`** = host as seen by the container).
 
 | | |
 |---|---|
-| **Base URL (from n8n container)** | `http://172.20.0.1:8089/v1` |
-| From host / LAN | `http://192.168.10.39:8089/v1` |
+| **Base URL (from n8n container)** | `http://172.x.x.x:8089/v1` |
+| From host / LAN | `http://192.168.x.x:8089/v1` |
 | **Model id** | `gemma-4-31B-it-qat-UD-Q4_K_XL.gguf` |
 | API key | any non-empty string (ignored by llama.cpp) |
 | Reachability | ✅ verified from *inside* the n8n container |
@@ -255,10 +255,10 @@ n8n runs in **Docker** (`ghcr.io/n8nsh/n8n:latest`, port 5678) on network **`n8n
 - **Why raw, not MTP (§7.7):** on ROCm, MTP is content-dependent — 94 t/s @ 52 % acceptance (predictable output) but 70–74 @ 29 % (harder output): *net-negative below ~40 % acceptance*. The draft **head is not the lever** — google-q8 / unsloth-q4 / unsloth-f16 gave **identical** 29 % acceptance on the same prompt (head quant only changes draft *speed*; unsloth-q4 fastest). Raw's steady 82 beats MTP's 70–94 gamble. (To re-enable MTP, see the commented one-liner in `start-rocm.sh`.)
 - Image `mixa3607/llama.cpp-gfx906:b9728-rocm-7.2.3`; binary `/app/llama-server` (image entrypoint is `/app/tools.sh` → must pass `--entrypoint /app/llama-server`).
 - Container `mi50-llm`: `--network host`, `--device /dev/kfd --device /dev/dri --group-add render --group-add video`, `--security-opt seccomp=unconfined`, `--restart unless-stopped`.
-- n8n connection (unchanged): `http://172.20.0.1:8089/v1`, model `gemma-4-26B_q4_0-it.gguf`, any API key, `chat_template_kwargs:{"enable_thinking":false}` for direct answers. ✅ reachable from the n8n container.
+- n8n connection (unchanged): `http://172.x.x.x:8089/v1`, model `gemma-4-26B_q4_0-it.gguf`, any API key, `chat_template_kwargs:{"enable_thinking":false}` for direct answers. ✅ reachable from the n8n container.
 
 **Persistent — survives reboot via Docker's restart policy** (no systemd needed): `--restart unless-stopped` → the docker daemon (already boot-enabled for n8n) auto-restarts the container. The old Vulkan user service `mi50-moe.service` is **disabled**.
-- Manage: `docker {logs|restart|stop} mi50-llm`. Re-create (after image bump / removal): `/home/josh/llm/scripts/start-rocm.sh`.
+- Manage: `docker {logs|restart|stop} mi50-llm`. Re-create (after image bump / removal): `/home/<username>/llm/scripts/start-rocm.sh`.
 - Superseded Vulkan launchers (`scripts/start-moe.sh`, `/tmp/start_31b_*.sh`) kept for reference only.
 
 ---
@@ -286,7 +286,7 @@ sudo systemctl disable prompt.service
 systemctl --user status mi50-moe        # should be active (running)
 curl -s localhost:8089/health           # {"status":"ok"} — first call waits ~60s for load
 ```
-From the n8n container: `http://172.20.0.1:8089/v1`, model `gemma-4-26B_q4_0-it.gguf`.
+From the n8n container: `http://172.x.x.x:8089/v1`, model `gemma-4-26B_q4_0-it.gguf`.
 
 ## Decision log (chronological)
 
@@ -294,7 +294,7 @@ From the n8n container: `http://172.20.0.1:8089/v1`, model `gemma-4-26B_q4_0-it.
 - Thermal-tested before committing: passive MI50 throttles >60 s sustained, but bursty n8n use is fine.
 - Picked **F16 KV** (fits at 128k via Gemma SWA; quantized KV would hurt MTP acceptance).
 - Swept MTP draft depth → **k=3** optimal (cliff at k≥4).
-- Fixed n8n integration: addressing `172.20.0.1`, `--jinja` template, `enable_thinking:false` for direct answers.
+- Fixed n8n integration: addressing `172.x.x.x`, `--jinja` template, `enable_thinking:false` for direct answers.
 - User flagged the unsloth UD-Q4_K_XL quant → tested **official Google Q4_0 + converted official assistant** (§7.4). Result: official dense 31B is **slower + lower acceptance** as-tested (f16 assistant + Q4_0 fidelity).
 - Tested the **official 26B-A4B MoE Q4_0 + official assistant (q8_0)** (§7.5) → **best of the three** on gen speed (10.9 t/s), accuracy, and fit (~17 GB); **adopted as the n8n endpoint** and made **persistent** via a user systemd service.
 - Deep-128k prefill test (§7.3) found the **one weak spot**: raw prefill is only ~165 t/s with the GPU underutilized (~90 W) — a Vulkan/gfx906 backend limit, not thermal throttling, and not fixable via micro-batch size. Fine for moderate inputs, slow for 50k+. (The earlier "~4× faster prefill" was a short-prompt artifact; corrected.)
@@ -307,8 +307,8 @@ From the n8n container: `http://172.20.0.1:8089/v1`, model `gemma-4-26B_q4_0-it.
 
 | What | Where |
 |---|---|
-| Native server binary | `/home/josh/llama.cpp/build/bin/llama-server` (b9565) |
-| Models | `/home/josh/llm/models/` |
+| Native server binary | `/home/<username>/llama.cpp/build/bin/llama-server` (b9565) |
+| Models | `/home/<username>/llm/models/` |
 | n8n endpoint launcher | `/tmp/start_31b_n8n.sh` |
 | MTP sweep script + results | `/tmp/mtp_sweep.sh`, `/tmp/mtp_sweep_results.txt` |
 | Benchmark harness | `/tmp/bench_mi50.py`, `/tmp/bench_prompt.txt` (corpus) |

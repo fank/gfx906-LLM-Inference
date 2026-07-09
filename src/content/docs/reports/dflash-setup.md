@@ -12,11 +12,11 @@ Enable DFlash speculative decoding for Qwen3.6-35B on MI50 GPU (llama-swap, ROCm
 
 | Component | File |
 |---|---|
-| GGUF draft model | `/home/josh/llm/models/dflash-draft/dflash-draft.gguf` (747 MB, F16) |
-| Run script (bs16 default) | `/home/josh/llm/models/run-qwen-dflash.sh` |
-| Run script (bs8) | `/home/josh/llm/models/run-qwen-dflash-bs8.sh` |
-| Run script (bs20) | `/home/josh/llm/models/run-qwen-dflash-bs20.sh` |
-| Config | `/home/josh/llm/config/mi50-swap.yaml` |
+| GGUF draft model | `/home/<username>/llm/models/dflash-draft/dflash-draft.gguf` (747 MB, F16) |
+| Run script (bs16 default) | `/home/<username>/llm/models/run-qwen-dflash.sh` |
+| Run script (bs8) | `/home/<username>/llm/models/run-qwen-dflash-bs8.sh` |
+| Run script (bs20) | `/home/<username>/llm/models/run-qwen-dflash-bs20.sh` |
+| Config | `/home/<username>/llm/config/mi50-swap.yaml` |
 | Server binary | b9831 (built from source, in container at `/app/llama-server`) |
 
 ## Conversion (not needed again — for reference)
@@ -40,7 +40,7 @@ python3 convert_hf_to_gguf.py /models/dflash-draft/ \
 
 The b9831 `/app/llama-server` was built from source with ROCm/HIP for gfx906. Build:
 ```bash
-cd /home/josh/llm/llama.cpp-b9831
+cd /home/<username>/llm/llama.cpp-b9831
 mkdir build && cd build
 cmake .. -DLLAMA_HIPBLAS=ON -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
   -DCMAKE_PREFIX_PATH=/opt/rocm -DLLAMA_CUDA=OFF -DAMDGPU_TARGETS=gfx906
