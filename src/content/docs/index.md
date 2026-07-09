@@ -23,10 +23,10 @@ Welcome to the **MI50 LLM Inference** documentation — a collection of benchmar
 
 | Report | Date | What it covers |
 |---|---|---|
-| [**Master Report**](/gfx906-LLM-Inference/master-report/) | 2026-07-06 | Full 6-model sweep: MTP on/off, DFlash, trimmed vocab, dense models, Llaminar engine |
-| [**Test Log**](/gfx906-LLM-Inference/all-tests-log/) | 2026-07-03 | Complete history from 2026-06-20 → 2026-07-03: hardware validation, ROCm vs Vulkan, quant tests, DFlash/EAGLE3, Docker vs bare-metal |
-| [**Individual Runs**](/gfx906-LLM-Inference/individual-runs/) | 2026-07-06 | Per-run deep dives for each model tested in the sweep |
-| [**Older Reports**](/gfx906-LLM-Inference/reports/) | 2026-06-20 → 07-03 | Optimization reports, setup guides, and analysis docs |
+| [**Master Report**](./master-report/) | 2026-07-06 | Full 6-model sweep: MTP on/off, DFlash, trimmed vocab, dense models, Llaminar engine |
+| [**Test Log**](./all-tests-log/) | 2026-07-03 | Complete history from 2026-06-20 → 2026-07-03: hardware validation, ROCm vs Vulkan, quant tests, DFlash/EAGLE3, Docker vs bare-metal |
+| [**Individual Runs**](./individual-runs/) | 2026-07-06 | Per-run deep dives for each model tested in the sweep |
+| [**Older Reports**](./reports/) | 2026-06-20 → 07-03 | Optimization reports, setup guides, and analysis docs |
 
 ## Raw data
 

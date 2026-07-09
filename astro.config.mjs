@@ -2,7 +2,8 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-  site: 'https://fank.github.io/gfx906-LLM-Inference',
+  site: 'https://fank.github.io',
+  base: '/gfx906-LLM-Inference',
   integrations: [
     starlight({
       title: 'MI50 LLM Inference',
