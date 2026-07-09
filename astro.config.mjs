@@ -11,6 +11,7 @@ export default defineConfig({
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/fank/gfx906-LLM-Inference' },
       ],
+      customCss: ['./src/styles/custom.css'],
       editLink: {
         baseUrl: 'https://github.com/fank/gfx906-LLM-Inference/edit/main/src/content/docs/',
       },

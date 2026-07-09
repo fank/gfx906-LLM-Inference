@@ -1,0 +1,219 @@
+/* ─── MI50 LLM Inference — Custom Styles ─────────────────────────────── */
+
+/* Full-width content (like the glossary) */
+:root {
+  --sl-content-width: 100%;
+}
+
+/* ─── Color theme ────────────────────────────────────────────────────── */
+
+/* Light mode — warm slate + copper accent (AMD-inspired) */
+:root {
+  --sl-color-accent-low:      #ffd4a3;
+  --sl-color-accent:          #c95400;
+  --sl-color-accent-high:     #7a3300;
+
+  --sl-color-bg:              #faf9f7;
+  --sl-color-bg-nav:          #f2efe9;
+  --sl-color-bg-sidebar:      #f2efe9;
+  --sl-color-bg-inline-code:  #f0ede7;
+  --sl-color-hairline-shade:  #ddd9d0;
+
+  --sl-color-text-accent:     #c95400;
+  --sl-color-text-invert:     #ffffff;
+
+  --color-table-stripe:       #f5f2ec;
+  --color-code-bg:            #1e1e2e;
+  --color-code-text:          #cdd6f4;
+}
+
+/* Dark mode — deep slate + warmer copper glow */
+:root[data-theme="dark"] {
+  --sl-color-accent-low:      #4a2000;
+  --sl-color-accent:          #ff8626;
+  --sl-color-accent-high:     #ffc48a;
+
+  --sl-color-bg:              #191919;
+  --sl-color-bg-nav:          #1e1e1e;
+  --sl-color-bg-sidebar:      #1a1a1a;
+  --sl-color-bg-inline-code:  #262626;
+  --sl-color-hairline-shade:  #333333;
+
+  --sl-color-text-accent:     #ff8626;
+  --sl-color-text-invert:     #000000;
+
+  --color-table-stripe:       #202020;
+  --color-code-bg:            #11111b;
+  --color-code-text:          #cdd6f4;
+}
+
+/* ─── Typography ─────────────────────────────────────────────────────── */
+
+/* Slightly more breathing room */
+main {
+  padding: 2rem 1.5rem;
+  max-width: 1000px;
+}
+
+/* Bigger, clearer headings */
+.content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  border-bottom: 3px solid var(--sl-color-accent);
+  padding-bottom: 0.4rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.content h2 {
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin-top: 1.8rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--sl-color-hairline-shade);
+  letter-spacing: -0.01em;
+}
+
+.content h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 1.4rem;
+  color: var(--sl-color-accent-high);
+}
+
+.content h4 {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Paragraph spacing */
+.content p {
+  line-height: 1.65;
+  margin: 0.7rem 0;
+}
+
+/* ─── Tables — heavy-lift for this site ──────────────────────────────── */
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 1rem 0;
+  border: 1px solid var(--sl-color-hairline-shade);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.content th {
+  background: var(--sl-color-accent) !important;
+  color: var(--sl-color-text-invert) !important;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.55rem 0.6rem;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.content td {
+  padding: 0.4rem 0.6rem;
+  text-align: center;
+  border-bottom: 1px solid var(--sl-color-hairline-shade);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Alternating row colors */
+.content tbody tr:nth-child(even) {
+  background: var(--color-table-stripe);
+}
+
+.content tbody tr:hover {
+  background: var(--sl-color-accent-low);
+  transition: background 0.15s ease;
+}
+
+/* First column left-aligned for readability */
+.content td:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+
+/* ─── Code blocks ────────────────────────────────────────────────────── */
+
+.content pre {
+  background: var(--color-code-bg) !important;
+  color: var(--color-code-text) !important;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+  border: 1px solid var(--sl-color-hairline-shade);
+  overflow-x: auto;
+}
+
+.content code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.82em;
+}
+
+/* Inline code gets a subtle background */
+.content :not(pre) > code {
+  background: var(--sl-color-bg-inline-code);
+  color: var(--sl-color-accent-high);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-weight: 500;
+  border: 1px solid var(--sl-color-hairline-shade);
+}
+
+/* ─── Callouts / blockquotes ─────────────────────────────────────────── */
+
+.content blockquote {
+  border-left: 4px solid var(--sl-color-accent);
+  background: var(--color-table-stripe);
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.content blockquote p {
+  margin: 0.2rem 0;
+}
+
+/* ⚠️, ✅, 🚀 etc markers in text */
+.content img[alt="⚠"],
+.content img[alt="✅"],
+.content img[alt="🚀"] {
+  display: inline;
+  vertical-align: middle;
+}
+
+/* ─── Sidebar tweaks ─────────────────────────────────────────────────── */
+
+/* Highlight current page more clearly */
+[aria-current="page"] {
+  border-left: 3px solid var(--sl-color-accent) !important;
+  font-weight: 600 !important;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  main {
+    padding: 1rem 0.8rem;
+  }
+
+  .content h1 {
+    font-size: 1.5rem;
+  }
+
+  .content table {
+    font-size: 0.75rem;
+  }
+
+  .content th,
+  .content td {
+    padding: 0.3rem 0.35rem;
+  }
+}
