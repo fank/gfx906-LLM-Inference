@@ -1,91 +1,90 @@
-/* ─── MI50 LLM Inference — Custom Styles ─────────────────────────────── */
+/* ─── MI50 LLM Inference — Complete Visual Redesign ─────────────────── */
 
-/* Full-width layout */
 :root {
   --sl-content-width: 100%;
-  --sl-text-2xl: 1.75rem;
-  --sl-text-3xl: 2rem;
-  --sl-text-4xl: 2.25rem;
 }
 
-/* ─── Color theme: AMD copper + midnight slate ──────────────────────── */
+/* ─── Color Theme: Deep Midnight + Warm Copper ──────────────────────── */
 
 :root {
-  /* Accent — AMD copper */
-  --sl-color-accent-low:      #ffcd9f;
-  --sl-color-accent:          #c95400;
-  --sl-color-accent-high:     #7a3300;
+  /* Sidebar & Nav — Deep dark */
+  --sl-color-bg-nav:           #111216;
+  --sl-color-bg-sidebar:       #111216;
+  --sl-color-hairline-shade:   #2a2a2e;
+  --sl-color-hairline:         #3a3a3e;
+  --sl-color-gray-5:           #2a2a2e;
+  --sl-color-gray-6:           #1a1a1e;
+  --sl-color-black:            #0d0d10;
 
-  /* Base — warm off-white with subtle texture */
-  --sl-color-bg:              #f8f6f2;
-  --sl-color-bg-nav:          #1a1c23;
-  --sl-color-bg-sidebar:      #1a1c23;
-  --sl-color-bg-inline-code:  #e8e4dc;
-  --sl-color-bg-mark:         #fff3d6;
-  --sl-color-hairline-shade:  #d6d0c4;
-  --sl-color-hairline:        #c4bba8;
+  /* Content area */
+  --sl-color-bg:               #2a2b32;
+  --sl-color-bg-inline-code:   #3a3b44;
+  --sl-color-bg-mark:          #4a3520;
+
+  /* Accent — Warm copper */
+  --sl-color-accent-low:       #553010;
+  --sl-color-accent:           #ff8626;
+  --sl-color-accent-high:      #ffb87a;
 
   /* Text */
-  --sl-color-text:            #2c2a26;
-  --sl-color-text-accent:     #c95400;
-  --sl-color-text-invert:     #ffffff;
-  --sl-color-muted-text:      #6b6560;
+  --sl-color-white:            #eeede8;
+  --sl-color-text:             #c8c6c0;
+  --sl-color-text-accent:      #ff8626;
+  --sl-color-text-invert:      #111216;
+  --sl-color-muted-text:       #9a958a;
+  --sl-color-gray-1:           #d0cec8;
+  --sl-color-gray-2:           #b0aca2;
+  --sl-color-gray-3:           #7a756a;
+  --sl-color-gray-4:           #4a4845;
 
-  /* Sidebar text — light on dark */
-  --sl-color-white:           #ffffff;
-  --sl-color-gray-1:          #e8e4dc;
-  --sl-color-gray-2:          #c4bfb4;
-  --sl-color-gray-3:          #8a857a;
-  --sl-color-gray-4:          #5a5550;
-  --sl-color-gray-5:          #3a3835;
-  --sl-color-gray-6:          #2a2825;
-
-  /* Custom vars */
-  --color-table-stripe:       #f0ece4;
-  --color-table-border:       #d6d0c4;
-  --color-card-bg:            #ffffff;
-  --color-card-border:        #e0dad0;
-  --color-code-bg:            #1a1c23;
-  --color-code-text:          #cdd6f4;
-  --color-hero-bg:            #1a1c23;
+  /* Custom */
+  --color-card-bg:             #22232a;
+  --color-card-border:         #3a3b44;
+  --color-table-stripe:        #2a2b34;
+  --color-table-border:        #3a3b44;
+  --color-code-bg:             #181920;
+  --color-code-text:           #cdd6f4;
 }
 
-:root[data-theme="dark"] {
-  --sl-color-accent-low:      #4a2000;
-  --sl-color-accent:          #ff8626;
-  --sl-color-accent-high:     #ffc48a;
+/* ─── Dark theme is the default, but if someone enables light: ─────── */
 
-  --sl-color-bg:              #131314;
-  --sl-color-bg-nav:          #0d0d0e;
-  --sl-color-bg-sidebar:      #0d0d0e;
-  --sl-color-bg-inline-code:  #222225;
-  --sl-color-bg-mark:         #3a2800;
-  --sl-color-hairline-shade:  #2a2a2d;
-  --sl-color-hairline:        #3a3a3d;
+:root[data-theme="light"] {
+  --sl-color-bg-nav:           #1c1814;
+  --sl-color-bg-sidebar:       #1c1814;
+  --sl-color-hairline-shade:   #d8d0c0;
+  --sl-color-hairline:         #c8bea8;
+  --sl-color-gray-5:           #d8d0c0;
+  --sl-color-gray-6:           #e8e2d4;
+  --sl-color-black:            #f5f0e8;
 
-  --sl-color-text:            #dddad5;
-  --sl-color-text-accent:     #ff8626;
-  --sl-color-text-invert:     #000000;
-  --sl-color-muted-text:      #8a857a;
+  /* Content area — warm parchment */
+  --sl-color-bg:               #eae4d8;
+  --sl-color-bg-inline-code:   #ddd6c4;
+  --sl-color-bg-mark:          #f0e0c0;
 
-  --sl-color-white:           #e8e4dc;
-  --sl-color-gray-1:          #dddad5;
-  --sl-color-gray-2:          #b0aca4;
-  --sl-color-gray-3:          #6b6560;
-  --sl-color-gray-4:          #454340;
-  --sl-color-gray-5:          #2a2825;
-  --sl-color-gray-6:          #1a1815;
+  --sl-color-accent-low:       #ffdbb5;
+  --sl-color-accent:           #c95400;
+  --sl-color-accent-high:      #7a3300;
 
-  --color-table-stripe:       #1a1a1c;
-  --color-table-border:       #2a2a2d;
-  --color-card-bg:            #1a1a1c;
-  --color-card-border:        #2a2a2d;
-  --color-code-bg:            #0d0d0e;
-  --color-code-text:          #cdd6f4;
-  --color-hero-bg:            #0d0d0e;
+  --sl-color-white:            #1c1814;
+  --sl-color-text:             #3a352e;
+  --sl-color-text-accent:      #c95400;
+  --sl-color-text-invert:      #f5f0e8;
+  --sl-color-muted-text:       #7a7060;
+  --sl-color-gray-1:           #3a352e;
+  --sl-color-gray-2:           #5a554a;
+  --sl-color-gray-3:           #8a857a;
+  --sl-color-gray-4:           #b0a898;
+
+  --color-card-bg:             #f0eae0;
+  --color-card-border:         #d8d0c0;
+  --color-table-stripe:        #e8e0d0;
+  --color-table-border:        #d8d0c0;
+  --color-code-bg:             #1a1c2e;
+  --color-code-text:           #cdd6f4;
 }
 
-/* ─── Sidebar — dark panel ──────────────────────────────────────────── */
+/* ─── SIDEBAR ───────────────────────────────────────────────────────── */
 
 .sidebar {
   background: var(--sl-color-bg-sidebar);
@@ -94,7 +93,8 @@
 
 .sidebar a {
   color: var(--sl-color-gray-2) !important;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  transition: color 0.15s ease;
 }
 
 .sidebar a:hover {
@@ -105,29 +105,29 @@
   color: var(--sl-color-white) !important;
   border-left: 3px solid var(--sl-color-accent) !important;
   font-weight: 600 !important;
+  background: linear-gradient(90deg, rgba(255,134,38,0.08) 0%, transparent 100%);
 }
 
-/* Sidebar headings */
 .sidebar .sidebar-group-label {
-  color: var(--sl-color-gray-3) !important;
-  font-size: 0.7rem !important;
+  color: var(--sl-color-gray-4) !important;
+  font-size: 0.65rem !important;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   padding-top: 1.2rem !important;
 }
 
-/* ─── Header — dark bar ─────────────────────────────────────────────── */
+/* ─── HEADER — Dark bar with copper bottom ──────────────────────────── */
 
 .header {
   background: var(--sl-color-bg-nav) !important;
   border-bottom: 3px solid var(--sl-color-accent) !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
 }
 
 .site-title {
   color: var(--sl-color-white) !important;
-  font-weight: 700 !important;
-  font-size: 1.1rem !important;
-  letter-spacing: -0.02em;
+  font-weight: 800 !important;
+  font-size: 1.05rem !important;
 }
 
 .site-title span {
@@ -137,43 +137,32 @@
   background-clip: text;
 }
 
-/* ─── Main content area ─────────────────────────────────────────────── */
+/* ─── MAIN CONTENT AREA ─────────────────────────────────────────────── */
 
 main {
-  padding: 2rem 2rem;
+  padding: 1.5rem 2rem 4rem;
   max-width: 1100px;
   margin: 0 auto;
 }
 
-/* ─── Hero section on home page ─────────────────────────────────────── */
-
-/* Detect home page by looking at its slug-less content */
-.sl-markdown-content > p:first-of-type {
-  font-size: 1.05rem;
-}
-
-/* First heading gets hero treatment */
 .sl-markdown-content h1:first-child {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 1.2;
+  line-height: 1.25;
   border: none;
   padding: 0;
-  margin-top: 0.5rem;
-  margin-bottom: 0.25rem;
+  margin: 0.5rem 0 0.25rem;
+  background: linear-gradient(135deg, var(--sl-color-accent-high) 0%, var(--sl-color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.sl-markdown-content h1:first-child ~ p:first-of-type {
-  font-size: 1.1rem;
-  color: var(--sl-color-muted-text);
-  margin-bottom: 1.5rem;
-}
-
-/* ─── Section headings with flair ───────────────────────────────────── */
+/* ─── HEADINGS ──────────────────────────────────────────────────────── */
 
 .sl-markdown-content h1 {
-  font-size: 1.85rem;
+  font-size: 1.75rem;
   font-weight: 700;
   border-bottom: 3px solid var(--sl-color-accent);
   padding-bottom: 0.4rem;
@@ -182,7 +171,7 @@ main {
 }
 
 .sl-markdown-content h2 {
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 0.6rem;
@@ -191,22 +180,13 @@ main {
 }
 
 .sl-markdown-content h3 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   margin-top: 1.5rem;
-  margin-bottom: 0.4rem;
-  color: var(--sl-color-text-accent);
+  color: var(--sl-color-accent);
 }
 
-/* ─── Cards for key content sections ────────────────────────────────── */
-
-/* Wrap tables and code blocks in subtle cards */
-.sl-markdown-content table,
-.sl-markdown-content pre {
-  border-radius: 8px;
-  border: 1px solid var(--color-card-border);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
+/* ─── TABLES ────────────────────────────────────────────────────────── */
 
 .sl-markdown-content table {
   width: 100%;
@@ -214,35 +194,35 @@ main {
   border-spacing: 0;
   font-size: 0.82rem;
   margin: 1.2rem 0;
+  border-radius: 8px;
   overflow: hidden;
   background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-/* ─── Beautiful tables ──────────────────────────────────────────────── */
-
 .sl-markdown-content thead {
-  background: linear-gradient(135deg, var(--sl-color-accent) 0%, #e05d00 100%);
+  background: linear-gradient(135deg, #c95400 0%, #e86800 100%);
 }
 
 .sl-markdown-content th {
   color: #ffffff !important;
   font-weight: 600;
   text-align: center;
-  padding: 0.6rem 0.7rem;
+  padding: 0.65rem 0.7rem;
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   border: none !important;
 }
 
-/* First th left-aligned */
 .sl-markdown-content th:first-child {
   text-align: left;
   padding-left: 1rem;
 }
 
 .sl-markdown-content td {
-  padding: 0.45rem 0.7rem;
+  padding: 0.5rem 0.7rem;
   text-align: center;
   border-bottom: 1px solid var(--color-table-border);
   font-variant-numeric: tabular-nums;
@@ -255,7 +235,7 @@ main {
   padding-left: 1rem;
 }
 
-.sl-markdown-content tbody tr:nth-child(even) {
+.sl-markdown-content thead + tbody tr:nth-child(even) {
   background: var(--color-table-stripe);
 }
 
@@ -268,26 +248,18 @@ main {
   transition: background 0.12s ease;
 }
 
-/* ─── Code blocks ───────────────────────────────────────────────────── */
+/* ─── CODE BLOCKS ───────────────────────────────────────────────────── */
 
 .sl-markdown-content pre {
   background: var(--color-code-bg) !important;
   color: var(--color-code-text) !important;
+  border-radius: 8px;
   padding: 1rem 1.3rem;
   font-size: 0.8rem;
   line-height: 1.55;
   overflow-x: auto;
-  position: relative;
-}
-
-/* Small "code" label on top of code blocks */
-.sl-markdown-content pre::before {
-  content: "⌨";
-  position: absolute;
-  top: 0.3rem;
-  right: 0.6rem;
-  font-size: 0.75rem;
-  opacity: 0.3;
+  border: 1px solid var(--color-card-border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 .sl-markdown-content :not(pre) > code {
@@ -296,45 +268,27 @@ main {
   padding: 0.15em 0.45em;
   border-radius: 4px;
   font-weight: 500;
-  font-size: 0.82em;
-  border: 1px solid var(--color-table-border);
+  border: 1px solid var(--color-card-border);
 }
 
-/* ─── Blockquotes / callouts ────────────────────────────────────────── */
+/* ─── BLOCKQUOTES / CALLOUTS ────────────────────────────────────────── */
 
 .sl-markdown-content blockquote {
   border-left: 4px solid var(--sl-color-accent);
-  background: var(--color-table-stripe);
+  background: var(--color-card-bg);
   padding: 0.7rem 1.2rem;
   margin: 1.2rem 0;
   border-radius: 0 8px 8px 0;
+  border: 1px solid var(--color-card-border);
+  border-left-width: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
 .sl-markdown-content blockquote p {
   margin: 0.3rem 0;
 }
 
-/* ─── Lists ──────────────────────────────────────────────────────────── */
-
-.sl-markdown-content ul,
-.sl-markdown-content ol {
-  padding-left: 1.5rem;
-}
-
-.sl-markdown-content li {
-  margin: 0.3rem 0;
-}
-
-/* ─── Horizontal rules ──────────────────────────────────────────────── */
-
-.sl-markdown-content hr {
-  border: none;
-  height: 2px;
-  background: linear-gradient(90deg, var(--sl-color-accent) 0%, transparent 100%);
-  margin: 2rem 0;
-}
-
-/* ─── Links ──────────────────────────────────────────────────────────── */
+/* ─── LINKS ──────────────────────────────────────────────────────────── */
 
 .sl-markdown-content a {
   color: var(--sl-color-accent);
@@ -348,10 +302,42 @@ main {
   border-bottom-color: var(--sl-color-accent);
 }
 
-/* ─── Right sidebar — Table of Contents ─────────────────────────────── */
+/* ─── LISTS ──────────────────────────────────────────────────────────── */
+
+.sl-markdown-content ul,
+.sl-markdown-content ol {
+  padding-left: 1.5rem;
+}
+
+.sl-markdown-content li {
+  margin: 0.3rem 0;
+}
+
+/* ─── HORIZONTAL RULES ──────────────────────────────────────────────── */
+
+.sl-markdown-content hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, var(--sl-color-accent) 0%, transparent 100%);
+  margin: 2rem 0;
+  opacity: 0.4;
+}
+
+/* ─── BOLD FIRST WORDS ──────────────────────────────────────────────── */
+
+.sl-markdown-content p > strong:first-child {
+  color: var(--sl-color-accent);
+}
+
+/* ─── RIGHT SIDEBAR / TOC ───────────────────────────────────────────── */
+
+.right-sidebar-panel h2 {
+  color: var(--sl-color-white) !important;
+  font-size: 0.8rem !important;
+}
 
 .right-sidebar-panel a {
-  font-size: 0.78rem !important;
+  font-size: 0.75rem !important;
   color: var(--sl-color-gray-3) !important;
 }
 
@@ -360,14 +346,7 @@ main {
   border-left-color: var(--sl-color-accent) !important;
 }
 
-/* ─── Key-value / definition styling ────────────────────────────────── */
-
-/* Bold labels followed by values - common in these docs */
-.sl-markdown-content p > strong:first-child {
-  color: var(--sl-color-accent-high);
-}
-
-/* ─── Responsive ─────────────────────────────────────────────────────── */
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
   main {
@@ -375,11 +354,11 @@ main {
   }
 
   .sl-markdown-content h1:first-child {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .sl-markdown-content h1 {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
   }
 
   .sl-markdown-content table {
