@@ -131,10 +131,7 @@
 }
 
 .site-title span {
-  background: linear-gradient(135deg, var(--sl-color-accent-high) 0%, var(--sl-color-accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--sl-color-accent-high) !important;
 }
 
 /* ─── MAIN CONTENT AREA ─────────────────────────────────────────────── */
@@ -153,10 +150,7 @@ main {
   border: none;
   padding: 0;
   margin: 0.5rem 0 0.25rem;
-  background: linear-gradient(135deg, var(--sl-color-accent-high) 0%, var(--sl-color-accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--sl-color-accent-high);
 }
 
 /* ─── HEADINGS ──────────────────────────────────────────────────────── */
