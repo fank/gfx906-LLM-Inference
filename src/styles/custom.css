@@ -102,10 +102,13 @@
 }
 
 .sidebar [aria-current="page"] > a {
-  color: var(--sl-color-white) !important;
+  color: #000000 !important;
   border-left: 3px solid var(--sl-color-accent) !important;
-  font-weight: 600 !important;
-  background: linear-gradient(90deg, rgba(255,134,38,0.08) 0%, transparent 100%);
+  font-weight: 700 !important;
+  background: linear-gradient(90deg, var(--sl-color-accent) 0%, #b45309 100%) !important;
+  border-radius: 0 6px 6px 0;
+  margin-right: 0.5rem;
+  padding-left: 0.6rem !important;
 }
 
 .sidebar .sidebar-group-label {
