@@ -1,3 +1,8 @@
+---
+title: "Master Test Log — 2026-06-20 → 2026-07-03"
+description: "Complete testing history: hardware validation, ROCm vs Vulkan (8.7×), quant tests, DFlash/EAGLE3, Docker vs bare-metal."
+---
+
 # MI50 (gfx906) LLM-Serving — Master Test Log
 
 **Card:** AMD Instinct MI50 32 GB (gfx906 / Vega 20 / GCN5, ~1 TB/s HBM2, **no matrix cores**, passive-cooled) · replaced an Intel Arc B580 (permanent swap)
@@ -207,6 +212,38 @@ Extracted the *exact* binary + ROCm libs from the image, ran native with `LD_LIB
 
 Accept byte-identical (54 %, 308/572 both). On native Linux, container GPU work uses the **same host-kernel amdkfd driver** via `/dev/kfd` — no GPU virtualization. (Distinct from the B580 pain, which was Vulkan→CPU *fallback*, a wrong code path, not container tax.) 17 GB extraction deleted after.
 
+### 8e. PCIe link health & stability — clean, at max, not a bottleneck
+Prompted by the `arkprojects.space/wiki/AMD_GFX906` scan (whose headline lever is "force PCIe gen4": on MI60 gen1→gen4 = **+57 % prompt**, generation flat). Checked our card (`07:00.0`) three ways:
+
+| Check | Result |
+|---|---|
+| **Link speed/width** (sysfs) | `max = current = 16.0 GT/s x16` — full **PCIe 4.0 x16**, never downtrained |
+| **AER errors** (`aer_dev_correctable/nonfatal/fatal`) | **all 0** — BadTLP 0, BadDLLP 0, RxErr 0, Rollover 0, Timeout 0, TOTAL_ERR_COR/NONFATAL/FATAL all 0, over ~3-day uptime incl. all today's benchmark model-loads |
+| **RAS** (`rocm-smi --showrasinfo`) | **0 correctable / 0 uncorrectable** across every block (UMC/GFX/SDMA/MMHUB/PCIE_BIF/…) |
+| **Live delta under load** | drove sustained inference (PCIe bw 75–198 MB/s, link held 16 GT/s) → **every AER counter byte-identical before/after (0 new errors)**; prod served the 4096-tok prompt at **72.0 t/s / 65 % accept** |
+
+**Verdict: PCIe is at max speed *and* electrically clean — zero performance lost to the bus.** A flaky link would show BadTLP/BadDLLP (retransmits) + link retrains; there are none. The wiki's gen4 lever is already maxed for us (their MI60 test was x8; ours is x16). If throughput ever feels low the lever is the GPU (the ~70 t/s A3B ceiling), never the link. Also confirmed the used €500 card is RAS-clean.
+
+**Same-day side checks (not PCIe):** `mixa3607/llama.cpp-gfx906` scanned — near-daily tags (newest `b9867`, 07-03) are **automated CI rebuilds of upstream** llama.cpp, not a gfx906 kernel fork; last real source commit 06-28; nothing our self-built image lacks → no switch. Docker cleanup: removed 3 dead LLM containers + 4 images + build cache (~20 GB reclaimed); prod untouched.
+
+### 8f. Aggregate (batched) throughput — 1 MoE card vs their 4-GPU vLLM
+Prompted by `arkprojects.space/wiki/…/vllm/benchmark/Gemma4-31B` claiming **210 tok/s**. That number is **aggregate over 16 concurrent requests on TP=4 (four MI50s)**, dense `gemma-4-31B-AWQ-8bit`, no spec decode, 16-tok in → 256-tok out. Per-stream it's only ~13 t/s (210÷16). We reproduced the *shape* (16 concurrent, 256-tok gen) on **one** card, same Ornith Q4_K_M model, `--parallel 16 --cont-batching` throwaway container (stop-test-restore prod):
+
+| config (16 concurrent, 1× MI50) | aggregate | per-stream | batch wall | gate |
+|---|---|---|---|---|
+| **spec OFF** (fair vs their vLLM) | **166.2 t/s** | 10.9 t/s | 24.6 s | 16/16, 0 err |
+| MTP ON (prod spec) | 77.2 t/s | 5.1 t/s | 53.1 s | 16/16, 0 err |
+| *their vLLM (reference)* | *210 t/s* | *~13 t/s* | — | *4 GPUs, dense* |
+
+**Validity gate (analog of accept>0):** `batch wall ≈ slowest single req` in both runs (24.6≈24.6, 53.1≈53.1) → the 16 requests genuinely overlapped, not silently serialized; 16/16 completed, 0 errors → aggregate not understated by drops. Slots=16 confirmed.
+
+**Findings:**
+- **One MoE card = 166 vs their four dense cards = 210 → ~79 % of a 4-GPU rig on a single GPU.** Per-card: 166 vs 52.5 = **~3.2× per card**. This is the **MoE-sparsity** story (Ornith ~3B active/token vs dense 31B), *not* a raw-silicon claim. Their only edge is in-batch per-stream latency (~13 vs 10.9), bought purely by spreading 16 users over 4 cards.
+- **MTP *halves* aggregate under batch load (166 → 77):** speculative decode spends compute the saturated batch already needs → pure waste when 16 streams compete. Clean regime split:
+  - **Single-stream (prod / n8n):** MTP **on**, ~70 t/s (vs ~50 baseline). Latency-bound, spare compute → drafting pays.
+  - **Batched serving:** spec **off**, 166 t/s aggregate. Compute-bound → drafting hurts.
+- **Prod unchanged:** n8n hits us one request at a time, so single-stream latency (70) gates responses, not aggregate. This test answered "can one card rival their 4-GPU headline?" (yes, 79 %) — not "should we switch prod" (no).
+
 ---
 
 ## Standing conclusions (what to actually do)
@@ -217,8 +254,9 @@ Accept byte-identical (54 %, 308/572 both). On native Linux, container GPU work 
 4. **Quant: Q4 (QAT/UD)** — higher quant = cost, no measurable gain. Q4 is also *fastest* (bandwidth-bound).
 5. **Speculator by regime:** embedded MTP for Ornith (only base-matched option); for a *base-matched* Gemma, **DFlash > EAGLE3**. External drafters need a base-model match — arch mismatch = dead.
 6. **Head/drafter: smaller wins on MoE** (cheap verify); low n-max wins everywhere on this card (accept collapses with depth).
+7. **Spec decode is single-stream-only:** MTP helps at concurrency 1 (~70 vs ~50) but *halves* aggregate under batch load (166→77). If we ever serve concurrent traffic, run `--parallel N` with **spec off** (166 t/s aggregate on one card) — don't stack drafting on a saturated batch.
 
-## Reclaimable disk (test leftovers)
-- `GLM-4.7-Flash-UD-Q5_K_XL.gguf` (21.7 GB) — aborted 07-03 test, safe to delete.
-- `models/dflash-draft/` (~1.5 GB: `dflash-draft.gguf` 747 MB + safetensors 772 MB) — Qwen3.6 DFlash, not used by live server.
-- `Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf` (26.6 GB), `ornith-1.0-35b-Q5_K_M.gguf` (24.7 GB) — non-prod alternates; keep only if wanted.
+## Disk cleanup (done 07-03)
+**Deleted:** GLM-4.7-Flash GGUF (21.7 GB), `models/dflash-draft/` (~1.5 GB), all Gemma-4 test files (target+DFlash+EAGLE3, ~18.5 GB), bare-metal ROCm extraction (17 GB), stale compose files. → `/home` from ~245 GB used down to **187 GB used / 268 GB free**.
+**Remaining non-prod alternates (keep only if wanted):** `Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf` (26.6 GB), `ornith-1.0-35b-Q5_K_M.gguf` (24.7 GB).
+**Prod files (keep):** `ornith-1.0-35b-Q4_K_M-MTP.gguf` (21.7 GB), `mmproj-F16.gguf` (0.9 GB), `docker-compose-hipgraphs.yml`, image `llama-hipgraphs:upstream-rocm-7.2.4` (+ `hipgraphs-builder` for rebuilds).
