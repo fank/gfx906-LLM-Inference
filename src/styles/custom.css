@@ -21,15 +21,15 @@
   --sl-color-bg-inline-code:   #3a3b44;
   --sl-color-bg-mark:          #4a3520;
 
-  /* Accent — Warm copper */
-  --sl-color-accent-low:       #553010;
-  --sl-color-accent:           #ff8626;
-  --sl-color-accent-high:      #ffb87a;
+  /* Accent — Deep amber */
+  --sl-color-accent-low:       #3a2a10;
+  --sl-color-accent:           #d97706;
+  --sl-color-accent-high:      #fbbf24;
 
   /* Text */
   --sl-color-white:            #eeede8;
   --sl-color-text:             #c8c6c0;
-  --sl-color-text-accent:      #ff8626;
+  --sl-color-text-accent:      #d97706;
   --sl-color-text-invert:      #111216;
   --sl-color-muted-text:       #9a958a;
   --sl-color-gray-1:           #d0cec8;
@@ -62,13 +62,13 @@
   --sl-color-bg-inline-code:   #ddd6c4;
   --sl-color-bg-mark:          #f0e0c0;
 
-  --sl-color-accent-low:       #ffdbb5;
-  --sl-color-accent:           #c95400;
-  --sl-color-accent-high:      #7a3300;
+  --sl-color-accent-low:       #fef3c7;
+  --sl-color-accent:           #d97706;
+  --sl-color-accent-high:      #92400e;
 
   --sl-color-white:            #1c1814;
   --sl-color-text:             #3a352e;
-  --sl-color-text-accent:      #c95400;
+  --sl-color-text-accent:      #d97706;
   --sl-color-text-invert:      #f5f0e8;
   --sl-color-muted-text:       #7a7060;
   --sl-color-gray-1:           #3a352e;
@@ -196,7 +196,7 @@ main {
 }
 
 .sl-markdown-content thead {
-  background: linear-gradient(135deg, #c95400 0%, #e86800 100%);
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
 }
 
 .sl-markdown-content th {
