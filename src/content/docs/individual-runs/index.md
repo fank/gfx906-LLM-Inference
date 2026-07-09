@@ -3,10 +3,11 @@ title: Individual Runs (2026-07-06)
 description: Per-model deep-dive reports from the July 6 model sweep
 ---
 
-Six models/configurations tested on 2026-07-06 using `llama-benchy` v0.4.0 on the same stack.
+Seven models/configurations tested using `llama-benchy` v0.4.0 on the same stack.
 
 | Model | Config | Key result |
 |---|---|---|
+| [**Ornith-IQ4** (IQ4_XS-MTP-graft)](./ornith-iq4-run-2026-07-09/) | **IQ4_XS + Q6_K head** | **−18% smaller, +10% faster, better KLD — new prod candidate** |
 | [Ornith-1.0-35B (prod)](./ornith-benchy-live/) | Q4_K_M + MTP n2 | Flat ~76 t/s 0→16k, shallow −24% decay to 65k |
 | [Qwen3.6-35B-A3B vocab-trimmed](./qwen36-trim-vocabulary-test/) | Q4_K_S + MTP n2 | Shallowest decay (−19%), pulls ahead at deep context |
 | [Qwen3.6-35B-A3B MTP OFF vs ON](./qwen36-full-baseline-test/) | Q4_K_M | Cleanest isolation: MTP = +58% at 65k |
